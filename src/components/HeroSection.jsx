@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ChevronDown, Zap, Users, Server } from 'lucide-react';
+import { ChevronDown, Zap, Users, Server, Activity, Terminal } from 'lucide-react';
 
 const floatingIcons = [
   { icon: '🍕', x: '10%', y: '20%', delay: 0, duration: 5 },
@@ -11,9 +11,26 @@ const floatingIcons = [
   { icon: '🥗', x: '30%', y: '10%', delay: 1.2, duration: 6 },
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ scaling }) {
+  const {
+    traffic = 20,
+    pods = 2,
+    cpu = 15,
+    rps = 50,
+    logs = [],
+    clusterStatus = 'Healthy',
+  } = scaling || {};
+
+  // Status styling
+  const statusColors = {
+    Healthy: 'status-healthy',
+    Degraded: 'status-degraded',
+    Overloaded: 'status-overloaded',
+    'Node Down': 'status-node-down',
+  };
+
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Animated grid */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
@@ -59,7 +76,7 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto w-full flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -77,18 +94,18 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.h1
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight mb-6"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <span className="block">Scaling the</span>
           <span className="gradient-text">Lunch Rush</span>
-          <span className="inline-block ml-3 text-6xl md:text-7xl">🍔🚀</span>
+          <span className="inline-block ml-3 text-5xl md:text-6xl">🍔🚀</span>
         </motion.h1>
 
         <motion.p
-          className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -97,6 +114,67 @@ export default function HeroSection() {
           Watch how <span className="text-primary-400 font-semibold">Kubernetes auto-scaling</span> transforms chaos into reliability.
         </motion.p>
 
+        {/* Live System Status Dashboard (Replacing static buttons and stats) */}
+        <motion.div
+          className="w-full max-w-3xl glass-card-strong p-6 md:p-8 mb-8 text-left border border-white/15 shadow-2xl relative overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+        >
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-white/15 pb-4">
+            <div className="flex items-center gap-2">
+              <Activity className="text-primary-400 animate-pulse" size={20} />
+              <h3 className="font-bold text-white tracking-wide">Live Cluster Dashboard</h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-400 font-mono">Status:</span>
+              <span className={`status-badge ${statusColors[clusterStatus] || 'status-healthy'}`}>
+                {clusterStatus}
+              </span>
+            </div>
+          </div>
+
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+              <div className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Traffic Load</div>
+              <div className="text-2xl font-black text-accent-400 font-mono">{traffic}%</div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+              <div className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Req / Sec</div>
+              <div className="text-2xl font-black text-primary-300 font-mono">{rps}</div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+              <div className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Avg Pod CPU</div>
+              <div className="text-2xl font-black text-red-400 font-mono">{cpu}%</div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+              <div className="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1">Active Pods</div>
+              <div className="text-2xl font-black text-green-400 font-mono">{pods}</div>
+            </div>
+          </div>
+
+          {/* Scrollable Event Logs Terminal */}
+          <div className="bg-black/60 rounded-xl p-4 border border-white/10 font-mono text-[11px] leading-relaxed">
+            <div className="flex items-center gap-2 text-gray-400 mb-2 pb-1 border-b border-white/5">
+              <Terminal size={12} />
+              <span>Event Stream</span>
+            </div>
+            <div className="h-16 overflow-y-auto space-y-1 scrollbar-thin">
+              {logs.slice(0, 3).map((log, i) => (
+                <div key={i} className="text-gray-300 truncate">
+                  <span className="text-primary-500 mr-1.5">&gt;</span>
+                  {log}
+                </div>
+              ))}
+              {logs.length === 0 && (
+                <div className="text-gray-500">Initializing simulation cluster logs...</div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 30 }}
@@ -104,50 +182,27 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           <motion.a
-            href="#problem"
+            href="#simulation"
             className="group relative px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            id="explore-solution-btn"
+            id="try-simulation-btn"
           >
             <span className="relative z-10 flex items-center gap-2">
-              Explore Solution
-              <ChevronDown size={18} className="group-hover:translate-y-1 transition-transform" />
+              🎮 Try Interactive Simulator
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </motion.a>
 
           <motion.a
-            href="#simulation"
+            href="#problem"
             className="px-8 py-4 glass-card text-white font-semibold hover:bg-white/10 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            id="try-simulation-btn"
+            id="explore-solution-btn"
           >
-            🎮 Try Simulation
+            Explore Case Study
           </motion.a>
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          className="mt-16 grid grid-cols-3 gap-4 md:gap-8 max-w-lg mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-        >
-          {[
-            { icon: <Users size={20} />, value: '10K+', label: 'Peak Users' },
-            { icon: <Server size={20} />, value: '12', label: 'Auto Pods' },
-            { icon: <Zap size={20} />, value: '99.9%', label: 'Uptime' },
-          ].map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className="flex items-center justify-center gap-1 text-primary-400 mb-1">
-                {stat.icon}
-              </div>
-              <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-              <div className="text-xs text-gray-500">{stat.label}</div>
-            </div>
-          ))}
         </motion.div>
       </div>
 

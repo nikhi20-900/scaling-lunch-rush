@@ -23,7 +23,7 @@
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -42,11 +42,11 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
+    @apply bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded-2xl;
   }
 
   .glass-card-strong {
-    @apply bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl;
+    @apply bg-white/[0.06] backdrop-blur-sm border border-white/[0.12] rounded-2xl;
   }
 
   .gradient-text {
@@ -58,7 +58,7 @@
   }
 
   .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .glow-border {
@@ -87,23 +87,14 @@
     50% { opacity: 1; transform: scale(1.05); }
   }
 
-  .traffic-line {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: drawLine 3s ease-in-out forwards;
-  }
+  /* Status badge utilities */
+  .status-healthy { @apply bg-green-500/10 text-green-400 border border-green-500/20; }
+  .status-degraded { @apply bg-yellow-500/10 text-yellow-400 border border-yellow-500/20; }
+  .status-crashed { @apply bg-red-500/10 text-red-400 border border-red-500/20; }
 
-  @keyframes drawLine {
-    to { stroke-dashoffset: 0; }
-  }
-
-  .node-appear {
-    animation: nodeAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
-
-  @keyframes nodeAppear {
-    from { opacity: 0; transform: scale(0.5); }
-    to { opacity: 1; transform: scale(1); }
+  /* Chaos button press effect */
+  .chaos-btn:active {
+    transform: scale(0.95);
   }
 }
 
@@ -114,10 +105,14 @@
 
   .bg-mesh {
     background-image:
-      radial-gradient(at 40% 20%, rgba(92, 124, 250, 0.15) 0px, transparent 50%),
-      radial-gradient(at 80% 0%, rgba(255, 152, 0, 0.1) 0px, transparent 50%),
-      radial-gradient(at 0% 50%, rgba(92, 124, 250, 0.1) 0px, transparent 50%),
-      radial-gradient(at 80% 50%, rgba(255, 152, 0, 0.05) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(92, 124, 250, 0.1) 0px, transparent 50%);
+      radial-gradient(at 40% 20%, rgba(92, 124, 250, 0.12) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(255, 152, 0, 0.08) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(92, 124, 250, 0.08) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgba(255, 152, 0, 0.04) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(92, 124, 250, 0.08) 0px, transparent 50%);
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }

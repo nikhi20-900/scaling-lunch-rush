@@ -7,6 +7,7 @@ const navLinks = [
   { label: 'Solution', href: '#solution' },
   { label: 'Architecture', href: '#architecture' },
   { label: 'Simulation', href: '#simulation' },
+  { label: 'Compare', href: '#comparison' },
   { label: 'Pipeline', href: '#pipeline' },
   { label: 'Metrics', href: '#metrics' },
 ];

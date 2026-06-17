@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import ProblemSection from './components/ProblemSection';
 import SolutionSection from './components/SolutionSection';
 import K8sArchitecture from './components/K8sArchitecture';
 import AutoScalingSimulation from './components/AutoScalingSimulation';
+import BeforeAfterComparison from './components/BeforeAfterComparison';
 import DevOpsPipeline from './components/DevOpsPipeline';
 import MetricsDashboard from './components/MetricsDashboard';
 import ConclusionSection from './components/ConclusionSection';
@@ -30,11 +30,12 @@ function App() {
       <div className="relative z-10">
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
         <main>
-          <HeroSection />
+          <HeroSection scaling={scaling} />
           <ProblemSection />
           <SolutionSection />
-          <K8sArchitecture />
+          <K8sArchitecture scaling={scaling} />
           <AutoScalingSimulation scaling={scaling} darkMode={darkMode} />
+          <BeforeAfterComparison scaling={scaling} />
           <DevOpsPipeline />
           <MetricsDashboard scaling={scaling} darkMode={darkMode} />
           <ConclusionSection />

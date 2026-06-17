@@ -60,7 +60,7 @@ export default function ConclusionSection() {
           </motion.div>
 
           {/* Benefits Grid */}
-          <motion.div variants={itemVariants} className="grid md:grid-cols-3 gap-8 mb-16">
+          <motion.div variants={itemVariants} className="grid md:grid-cols-3 gap-8">
             {benefits.map((benefit, i) => (
               <motion.div
                 key={i}
@@ -78,54 +78,6 @@ export default function ConclusionSection() {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
-
-          {/* Before/After comparison */}
-          <motion.div variants={itemVariants} className="glass-card p-8 md:p-10">
-            <h3 className="text-2xl font-bold text-center mb-8">Before vs After</h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Before */}
-              <div className="p-6 rounded-2xl bg-red-500/5 border border-red-500/15">
-                <h4 className="text-lg font-semibold text-red-400 mb-4 flex items-center gap-2">
-                  ❌ Without Kubernetes
-                </h4>
-                <ul className="space-y-3 text-sm text-gray-400">
-                  {[
-                    'Single server — single point of failure',
-                    'Manual scaling — slow response',
-                    '45-minute outage every lunch hour',
-                    '$15,000 daily revenue loss',
-                    'Customer churn to competitors',
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-red-500 mt-0.5">✗</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* After */}
-              <div className="p-6 rounded-2xl bg-green-500/5 border border-green-500/15">
-                <h4 className="text-lg font-semibold text-green-400 mb-4 flex items-center gap-2">
-                  ✅ With Kubernetes + HPA
-                </h4>
-                <ul className="space-y-3 text-sm text-gray-400">
-                  {[
-                    'Multi-pod architecture — no single failure',
-                    'Auto-scaling in seconds — instant response',
-                    'Zero downtime during peak traffic',
-                    '99.95% uptime — revenue preserved',
-                    'Happy customers — growing user base',
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-green-500 mt-0.5">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
           </motion.div>
         </motion.div>
       </div>
