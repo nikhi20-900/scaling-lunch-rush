@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: scaling-lunch-rush-backend
+  namespace: scaling-lunch-rush
+  labels:
+    app: scaling-lunch-rush-backend
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: scaling-lunch-rush-backend
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

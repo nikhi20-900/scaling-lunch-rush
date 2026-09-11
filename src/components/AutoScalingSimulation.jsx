@@ -135,7 +135,7 @@ function DetailPodCard({ pod, onKill }) {
   );
 }
 
-export default function AutoScalingSimulation({ scaling, darkMode }) {
+export default function AutoScalingSimulation({ scaling, darkMode, liveInfra }) {
   const {
     traffic, setTraffic, pods, podsList = [], cpu, rps,
     isRunning, setIsRunning, k8sEnabled, setK8sEnabled,
@@ -364,6 +364,41 @@ export default function AutoScalingSimulation({ scaling, darkMode }) {
                     transition={{ duration: 0.5 }}
                   />
                 </div>
+
+                {/* Real Kubernetes In-Cluster Pods Banner */}
+                {liveInfra?.pods?.length > 0 && (
+                  <div className="mb-4 p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-green-500/10">
+                      <div className="flex items-center gap-2 font-mono text-green-400 font-bold">
+                        <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <span>Kubernetes In-Cluster Pods (scaling-lunch-rush)</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-gray-400">
+                        Source: Kubernetes API + Prometheus
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {liveInfra.pods.map((p) => (
+                        <div key={p.name} className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-lg bg-black/40 font-mono text-[11px]">
+                          <span className="font-bold text-white truncate max-w-[240px]">{p.name}</span>
+                          <div className="flex items-center gap-3">
+                            <span className={`status-badge ${p.status === 'Running' ? 'status-healthy' : 'status-terminating'}`}>
+                              {p.status}
+                            </span>
+                            <span className="text-gray-400">Ready: <strong className={p.ready ? 'text-green-400' : 'text-red-400'}>{p.ready ? 'true' : 'false'}</strong></span>
+                            <span className="text-gray-400">Restarts: <strong>{p.restarts}</strong></span>
+                            {p.memory && (
+                              <span className="text-gray-400">Mem: <strong>{(p.memory / (1024 * 1024)).toFixed(1)} MB</strong></span>
+                            )}
+                            {p.cpu !== null && (
+                              <span className="text-gray-400">App CPU: <strong>{p.cpu.toFixed(1)}%</strong></span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Pod Cards Container */}
                 <div className="bg-black/20 rounded-2xl p-4 min-h-[220px] border border-white/5">

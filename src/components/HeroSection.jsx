@@ -125,7 +125,7 @@ export default function HeroSection({ scaling }) {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-white/15 pb-4">
             <div className="flex items-center gap-2">
               <Activity className="text-primary-400 animate-pulse" size={20} />
-              <h3 className="font-bold text-white tracking-wide">Live Cluster Dashboard</h3>
+              <h3 className="font-bold text-white tracking-wide">Simulation Cluster Overview</h3>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-400 font-mono">Status:</span>

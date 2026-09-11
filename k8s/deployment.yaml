@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scaling-lunch-rush-backend
+  namespace: scaling-lunch-rush
+  labels:
+    app: scaling-lunch-rush-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scaling-lunch-rush-backend
+  template:
+    metadata:
+      labels:
+        app: scaling-lunch-rush-backend
+    spec:
+      serviceAccountName: scaling-lunch-rush-backend
+      containers:
+        - name: backend
+          image: scaling-lunch-rush-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3001
+              name: http
+          env:
+            - name: PORT
+              value: "3001"
+            - name: NODE_ENV
+              value: "production"
+            - name: PROMETHEUS_URL
+              value: "http://monitoring-kube-prometheus-prometheus.monitoring:9090"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3001
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10

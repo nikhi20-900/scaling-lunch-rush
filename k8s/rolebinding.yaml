@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scaling-lunch-rush-backend-reader-binding
+  namespace: scaling-lunch-rush
+subjects:
+  - kind: ServiceAccount
+    name: scaling-lunch-rush-backend
+    namespace: scaling-lunch-rush
+roleRef:
+  kind: Role
+  name: scaling-lunch-rush-backend-reader
+  apiGroup: rbac.authorization.k8s.io
